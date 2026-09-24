@@ -10,7 +10,6 @@ _diag*
 *_verify*
 *_simulate*
 *fix.*
-*s.*
 _build*
 create_shortcut*
 

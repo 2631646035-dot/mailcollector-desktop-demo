@@ -12,6 +12,8 @@
 - 自动解压 ZIP/RAR/7Z，并对重复文件自动改名
 - 保存常用筛选方案，支持按计划定时执行
 - 在 Outlook 本地客户端和标准 IMAP 邮箱之间切换
+- 像素田园、清新果园、深海夜色三套主题即时切换
+- 简体中文 / English 双语界面与系统托盘后台运行
 
 ## 技术实现
 
@@ -19,14 +21,14 @@
 - Outlook COM 自动化（pywin32）
 - IMAP4 SSL
 - QThread 后台任务与进度反馈
-- JSON 方案持久化
+- Windows 凭据库 / keyring 密钥管理与 JSON 方案持久化
 - 日期动态窗口、附件类型过滤和文件归档
 
 ## 安全设计
 
-- IMAP 密码仅用于当前运行，不写入 `plans.json`
-- 已保存的 IMAP 方案会保留服务器、端口和账号，但不会保留密码
-- 定时执行 IMAP 方案时，可以通过环境变量 `MAILCOLLECTOR_IMAP_PASSWORD` 提供运行密码
+- IMAP 授权码保存在 Windows 凭据库（兼容 keyring），不会写入 `plans.json`
+- 持久化层会递归剔除名为 `password` 的字段，避免后续功能改动误存授权码
+- 已保存方案仅保留服务器、端口与账号等非敏感配置
 - 仓库不包含真实邮箱、邮件内容、Cookie、Token 或账号凭据
 
 ## 运行
@@ -48,6 +50,8 @@ Outlook 模式需要安装桌面版 Outlook。IMAP 模式建议使用邮箱服�
 src/
   launch.pyw          # 桌面启动入口
   mail_collector.py   # GUI、筛选、导出和计划任务
+  mailcollector-icon.ico
+  mailcollector-icon.png
 docs/
   mailcollector-overview.png
 requirements.txt
@@ -56,7 +60,7 @@ start.bat
 
 ## 简历摘要
 
-使用 Python、PySide6、Outlook COM 与 IMAP 独立开发桌面邮件自动化工具，实现多条件筛选、附件批量导出、自动解压、方案复用和定时任务，并通过线程化执行避免界面阻塞。
+使用 Python、PySide6、Outlook COM 与 IMAP 独立开发桌面邮件自动化工具，实现多条件筛选、附件批量导出、自动解压、方案复用、定时任务、主题与双语界面，并通过线程化执行避免界面阻塞；邮箱授权码交由系统凭据库保存。
 
 ## 隐私说明
 
